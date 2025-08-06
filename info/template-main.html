@@ -1499,7 +1499,15 @@ Displayed by hashChanged() in navigation.js
 <div class="displayOnload displayMapForLoad" style="display:none;position:relative;overflow:hidden;">
 
   <div id="map1" class="displayMapForLoad resizableDiv" style="display:none; width:100%">
-    <!-- MAP LOADING - Root image path not usable when embedding
+    <!-- MAP LOADING - Root image path not usable when embedding -->
+<script type="text/javascript" src="../js/time-slider.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof initTimeSlider === 'function') {
+            initTimeSlider();
+        }
+    });
+</script>
     <img src='/localsite/img/icon/loading.gif' loading='lazy' class='mapLoadingIcon' style='margin:100px 200px 100px 200px; width:120px'>
     -->
     <div class="dragHandle"></div></div>
