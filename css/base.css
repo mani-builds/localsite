@@ -12,7 +12,7 @@ Used in localsite, modelearth, io, neighborhood, trees
 }
 @font-face {
   font-family:'Amaze';font-weight:300;
-  src:url("/localsite/css/fonts/ember.woff2") format("woff2"), url("/localsite/css/fonts/ember.woff") format("woff")
+  src:url("./fonts/ember.woff2") format("woff2"), url("./fonts/ember.woff") format("woff")
 }
 * {box-sizing: border-box;}
 /* CAUSED SPACE in map/index.html WHEN #tableSide DIV EMPTY - SHOULD NOT NEED
