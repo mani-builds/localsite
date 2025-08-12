@@ -2451,6 +2451,26 @@ function loadMarkdown(pagePath, divID, target, attempts, callback) {
         }
       });
 
+    }).catch(function(error) {
+      // Error handling for when the README.md file fails to load
+      console.error("Failed to load README.md file from:", pagePath);
+      console.error("Error details:", error);
+      
+      // Display an error message in the readmeDiv
+      const errorMessage = "<div style='color: red; padding: 20px; border: 1px solid red; margin: 10px;'>" +
+                          "<h3>Error Loading README.md</h3>" +
+                          "<p>Could not load README.md file from: " + pagePath + "</p>" +
+                          "<p>Error: " + error.message + "</p>" +
+                          "<p>This could be due to a path issue, CORS restrictions, or the file not being available.</p>" +
+                          "</div>";
+      
+      loadIntoDiv(pageFolder, divID, errorMessage, function() {
+        if (typeof callback === 'function') {
+          setTimeout(function() {
+            callback();
+          }, 30);
+        }
+      });
     });
   });
   });
