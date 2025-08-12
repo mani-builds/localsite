@@ -647,24 +647,32 @@ function get_localsite_root() { // Also in two other places
   }
   let hostnameAndPort = extractHostnameAndPort(myScript.src);
   //consoleLog("hostnameAndPort: " + hostnameAndPort);
+  
+  // Default path assuming site is at root
   let theroot = location.protocol + '//' + location.host + '/localsite/';
 
   // Handle GitHub Pages URLs (e.g., mani-builds.github.io/webroot/)
-  if (location.host.indexOf('github.io') >= 0 && location.pathname.indexOf('/webroot/') >= 0) {
-    // Extract the base path (e.g., /webroot/) from the current pathname
-    console.log("GitHub Pages detected. Pathname:", location.pathname);
-    const pathParts = location.pathname.split('/');
-    const webrootIndex = pathParts.indexOf('webroot');
-    console.log("webrootIndex:", webrootIndex);
-    if (webrootIndex > 0) {
-      // Build the base path including /webroot/
-      let basePath = '';
-      for (let i = 1; i <= webrootIndex; i++) {
+  // Check if we're on GitHub Pages and the current page is not at root
+  if (location.host.indexOf('github.io') >= 0) {
+    // For GitHub Pages, we need to determine the correct base path
+    // If the current page is in a subdirectory, we need to include that in the path
+    const pathParts = location.pathname.split('/').filter(part => part.length > 0);
+    
+    // Find the path to the current page (excluding filename if present)
+    let basePath = '';
+    for (let i = 0; i < pathParts.length; i++) {
+      // If this part is not a file extension (doesn't contain .), add it to path
+      if (pathParts[i].indexOf('.') === -1) {
         basePath += '/' + pathParts[i];
+      } else {
+        // This is likely a filename, so we stop here
+        break;
       }
-      console.log("basePath:", basePath);
+    }
+    
+    // If we're in a subdirectory, adjust the path
+    if (basePath.length > 0) {
       theroot = location.protocol + '//' + location.host + basePath + '/localsite/';
-      console.log("Adjusted theroot for GitHub Pages:", theroot);
     }
   }
 
