@@ -664,6 +664,11 @@ function get_localsite_root() { // Also in two other places
       const localsiteIndex = scriptSrc.indexOf('/localsite/');
       if (localsiteIndex > 0) {
         theroot = scriptSrc.substring(0, localsiteIndex + 11); // +11 for "/localsite/"
+      } else {
+        // If /localsite/ is not found in the script src, 
+        // assume the standard GitHub Pages structure
+        // e.g., for https://mani-builds.github.io/webroot/
+        theroot = location.protocol + '//' + location.host + '/localsite/';
       }
     }
   }
