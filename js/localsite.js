@@ -649,6 +649,21 @@ function get_localsite_root() { // Also in two other places
   //consoleLog("hostnameAndPort: " + hostnameAndPort);
   let theroot = location.protocol + '//' + location.host + '/localsite/';
 
+  // Handle GitHub Pages URLs (e.g., mani-builds.github.io/webroot/)
+  if (location.host.indexOf('github.io') >= 0 && location.pathname.indexOf('/webroot/') >= 0) {
+    // Extract the base path (e.g., /webroot/) from the current pathname
+    const pathParts = location.pathname.split('/');
+    const webrootIndex = pathParts.indexOf('webroot');
+    if (webrootIndex > 0) {
+      // Build the base path including /webroot/
+      let basePath = '';
+      for (let i = 1; i <= webrootIndex; i++) {
+        basePath += '/' + pathParts[i];
+      }
+      theroot = location.protocol + '//' + location.host + basePath + '/localsite/';
+    }
+  }
+
   if (location.host.indexOf("georgia") >= 0) { // For feedback link within embedded map
     //theroot = "https://map.georgia.org/localsite/";
     theroot = hostnameAndPort + "/localsite/";
