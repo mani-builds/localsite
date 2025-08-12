@@ -652,27 +652,19 @@ function get_localsite_root() { // Also in two other places
   let theroot = location.protocol + '//' + location.host + '/localsite/';
 
   // Handle GitHub Pages URLs (e.g., mani-builds.github.io/webroot/)
-  // Check if we're on GitHub Pages and the current page is not at root
+  // Check if we're on GitHub Pages
   if (location.host.indexOf('github.io') >= 0) {
-    // For GitHub Pages, we need to determine the correct base path
-    // If the current page is in a subdirectory, we need to include that in the path
-    const pathParts = location.pathname.split('/').filter(part => part.length > 0);
-    
-    // Find the path to the current page (excluding filename if present)
-    let basePath = '';
-    for (let i = 0; i < pathParts.length; i++) {
-      // If this part is not a file extension (doesn't contain .), add it to path
-      if (pathParts[i].indexOf('.') === -1) {
-        basePath += '/' + pathParts[i];
-      } else {
-        // This is likely a filename, so we stop here
-        break;
+    // For GitHub Pages, determine the base path from the current script's src
+    // This is more reliable than trying to parse location.pathname
+    if (myScript && myScript.src) {
+      // Extract the path up to /localsite/ from the script src
+      // e.g., if script src is https://mani-builds.github.io/webroot/localsite/js/localsite.js
+      // we want to extract https://mani-builds.github.io/webroot/localsite/
+      const scriptSrc = myScript.src;
+      const localsiteIndex = scriptSrc.indexOf('/localsite/');
+      if (localsiteIndex > 0) {
+        theroot = scriptSrc.substring(0, localsiteIndex + 11); // +11 for "/localsite/"
       }
-    }
-    
-    // If we're in a subdirectory, adjust the path
-    if (basePath.length > 0) {
-      theroot = location.protocol + '//' + location.host + basePath + '/localsite/';
     }
   }
 
