@@ -652,15 +652,19 @@ function get_localsite_root() { // Also in two other places
   // Handle GitHub Pages URLs (e.g., mani-builds.github.io/webroot/)
   if (location.host.indexOf('github.io') >= 0 && location.pathname.indexOf('/webroot/') >= 0) {
     // Extract the base path (e.g., /webroot/) from the current pathname
+    console.log("GitHub Pages detected. Pathname:", location.pathname);
     const pathParts = location.pathname.split('/');
     const webrootIndex = pathParts.indexOf('webroot');
+    console.log("webrootIndex:", webrootIndex);
     if (webrootIndex > 0) {
       // Build the base path including /webroot/
       let basePath = '';
       for (let i = 1; i <= webrootIndex; i++) {
         basePath += '/' + pathParts[i];
       }
+      console.log("basePath:", basePath);
       theroot = location.protocol + '//' + location.host + basePath + '/localsite/';
+      console.log("Adjusted theroot for GitHub Pages:", theroot);
     }
   }
 
@@ -677,6 +681,7 @@ function get_localsite_root() { // Also in two other places
     // Enable to test embedding without locathost repo in site theroot. Rename your localsite folder.
     //theroot = "https://model.earth/localsite/";
   }
+  console.log("Final theroot value:", theroot);
   localsite_repo3 = theroot; // Save to reduce DOM hits
   return (theroot);
 }
