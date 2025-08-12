@@ -662,13 +662,18 @@ function get_localsite_root() { // Also in two other places
       // we want to extract https://mani-builds.github.io/webroot/localsite/
       const scriptSrc = myScript.src;
       const localsiteIndex = scriptSrc.indexOf('/localsite/');
-      if (localsiteIndex > 0) {
+      if (localsiteIndex > -1) {
         theroot = scriptSrc.substring(0, localsiteIndex + 11); // +11 for "/localsite/"
       } else {
-        // If /localsite/ is not found in the script src, 
-        // assume the standard GitHub Pages structure
-        // e.g., for https://mani-builds.github.io/webroot/
-        theroot = location.protocol + '//' + location.host + '/localsite/';
+        // Fallback for GitHub Pages: construct path from pathname
+        const pathParts = location.pathname.split('/').filter(part => part.length > 0);
+        const repoName = pathParts[0];
+        if (repoName) {
+          theroot = location.protocol + '//' + location.host + '/' + repoName + '/localsite/';
+        } else {
+          // If no repo name, assume root, but this is unlikely for project pages
+          theroot = location.protocol + '//' + location.host + '/localsite/';
+        }
       }
     }
   }
